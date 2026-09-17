@@ -5,7 +5,17 @@ from models import Animal, Farmer
 farmers_bp = Blueprint("farmers", __name__)
 
 
-@farmers_bp.route("/<int:owner_id>", methods=["GET"])
+@farmers_bp.route("/farmers", methods=["GET"])
+def get_farmers():
+    """Return all farmers."""
+    farmers = Farmer.query.all()
+    return jsonify({
+        "count": len(farmers),
+        "data": [farmer.to_dict() for farmer in farmers],
+    }), 200
+
+
+@farmers_bp.route("/farmers/<int:owner_id>", methods=["GET"])
 def get_farmer(owner_id):
     """Return farmer details by owner_id."""
     farmer = Farmer.query.get(owner_id)
@@ -14,7 +24,7 @@ def get_farmer(owner_id):
     return jsonify({"data": farmer.to_dict()}), 200
 
 
-@farmers_bp.route("/<int:owner_id>/animals", methods=["GET"])
+@farmers_bp.route("/farmers/<int:owner_id>/animals", methods=["GET"])
 def get_farmer_animals(owner_id):
     """Return all animals belonging to a farmer."""
     farmer = Farmer.query.get(owner_id)

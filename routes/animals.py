@@ -5,7 +5,17 @@ from models import Animal, HealthRecord, LabReport, Vaccination
 animals_bp = Blueprint("animals", __name__)
 
 
-@animals_bp.route("/<animal_id>", methods=["GET"])
+@animals_bp.route("/animals", methods=["GET"])
+def get_animals():
+    """Return all animals."""
+    animals = Animal.query.all()
+    return jsonify({
+        "count": len(animals),
+        "data": [animal.to_dict() for animal in animals],
+    }), 200
+
+
+@animals_bp.route("/animals/<string:animal_id>", methods=["GET"])
 def get_animal(animal_id):
     """Return complete animal profile including owner details."""
     animal = Animal.query.get(animal_id)
@@ -14,7 +24,7 @@ def get_animal(animal_id):
     return jsonify({"data": animal.to_dict(include_owner=True)}), 200
 
 
-@animals_bp.route("/<animal_id>/vaccinations", methods=["GET"])
+@animals_bp.route("/animals/<string:animal_id>/vaccinations", methods=["GET"])
 def get_animal_vaccinations(animal_id):
     """Return vaccination history for an animal."""
     animal = Animal.query.get(animal_id)
@@ -33,7 +43,7 @@ def get_animal_vaccinations(animal_id):
     }), 200
 
 
-@animals_bp.route("/<animal_id>/health", methods=["GET"])
+@animals_bp.route("/animals/<string:animal_id>/health", methods=["GET"])
 def get_animal_health(animal_id):
     """Return disease / health history for an animal."""
     animal = Animal.query.get(animal_id)
@@ -52,7 +62,7 @@ def get_animal_health(animal_id):
     }), 200
 
 
-@animals_bp.route("/<animal_id>/labreports", methods=["GET"])
+@animals_bp.route("/animals/<string:animal_id>/lab-reports", methods=["GET"])
 def get_animal_lab_reports(animal_id):
     """Return laboratory reports for an animal."""
     animal = Animal.query.get(animal_id)

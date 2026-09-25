@@ -1,0 +1,15 @@
+terminal 1:
+cd "C:\Users\dell\New folder\backend development"
+
+.\.venv\Scripts\Activate.ps1
+
+python app.py
+Excpected output:
+✅ Gemini API Loaded
+* Running on http://127.0.0.1:5000
+
+termianl 2:
+cd "C:\Users\dell\frontend"
+
+npm install
+npm run dev
